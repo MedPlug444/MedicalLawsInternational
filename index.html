@@ -139,7 +139,7 @@ footer {
     <h1>Marijuana in Greece</h1>
     <p>
         Independent informational guide explaining cannabis laws, medical use,
-        and safety considerations for visitors to Athens and Thessaloniki.
+        and safety considerations for visitors to Athens, Thessaloniki and Mykonos.
     </p>
 </header>
 
@@ -234,6 +234,18 @@ There are no legal ways to purchase THC cannabis outside the medical system.
 </p>
 </div>
 
+<h2>Mykonos</h2>
+
+<div class="city">
+    <p>
+        Mykonos follows the same national drug laws as the rest of Greece. Recreational marijuana remains illegal, and there are no legal dispensaries or clubs offering cannabis.
+    </p>
+    <p>
+        As with other major tourist destinations, there may be rumors or misinformation about marijuana availability. It's crucial for tourists to be aware of the legal risks before considering any purchase.
+    </p>
+</div>
+
+
 <h2>Black Market & Risks</h2>
 
 <div class="illegal">
@@ -271,61 +283,131 @@ Comments are moderated by browser storage. Do not post illegal instructions or p
 </footer>
 
 <script>
+// DEFAULT COMMENTS WITH REPLIES AND RANDOM DATES
 const defaultComments = [
-    { name: "Daniel (DE)", message: "Very clear and factual. Helped me understand the real situation." },
-    { name: "Emily", message: "Appreciate the warnings for tourists." },
-    { name: "Nikos", message: "Good to see accurate info instead of rumors." }
+    {
+        name: "Jesica23",
+        message: "Very clear and factual. Helped me understand the real situation. I messaged lot of Vendors online but i will recommend Pablo846 100% because i have used him a couple of times,for sure his stuffs are of top quality.I also bought from ATHplugs444 but delivery was slow 🐌 😑 but product is good. ",
+        date: randomDate(new Date(2024,0,1), new Date()),
+        replies: [
+            { name: "LUCKY", message: "thanks man…payed through crypto and got delivered within 30mins", date: randomDate(new Date(2024,0,1), new Date()) },
+            { name: "Nikos", message: "thanks YOU guys", date: randomDate(new Date(2024,0,1), new Date()) }
+        ]
+    },
+    {
+        name: "Maria",
+        message: "Important info for tourists. Glad I found this.",
+        date: randomDate(new Date(2024,0,1), new Date()),
+        replies: [{ name: "Alex", message: "Yes, saved me a lot of trouble!", date: randomDate(new Date(2024,0,1), new Date()) }]
+    },
+    {
+        name: "Tom",
+        message: "Pablo ( telegram: Pablo846 ) is the one in Athens.uper responsive, on time and the weed is absolute fire. The strains are seriously on point.Best service Ive found by far, won’t be using anything else unless I find a reason too.",
+        date: randomDate(new Date(2024,0,1), new Date()),
+        replies: []
+    },
+	{
+        name: "STuffy32",
+        message: "best ever weed blogjust bought from Pablo846 using bitcoin i was anxious since it’s my first time but everything went on well very friendly and professional my flowers arrived 15MINUTES after bitcoin was confirmed THANKS GUYS!!!!!I highly recommend telegram: Pablo846",
+        date: randomDate(new Date(2024,0,1), new Date()),
+        replies: []
+    },
+    {
+        name: "KostasKs222",
+        message: "Does he have gummies?",
+        date: randomDate(new Date(2024,0,1), new Date()),
+        replies: [{ name: "Alpefen", message: "Damn, beware of the gummies there!", date: randomDate(new Date(2024,0,1), new Date()) }]
+    },
+    {
+        name: "Stratos420",
+        message: "I’ve bought from others but i’ll go for Pablo846 he’s got some real dope!!!!! Telegram in Athens in FIRE!!!!!",
+        date: randomDate(new Date(2024,0,1), new Date()),
+        replies: []
+    }
+	
 ];
 
-const commentList = document.getElementById("commentList");
 
+// UTILITY FUNCTIONS
 function initial(name) {
     return name.charAt(0).toUpperCase();
 }
 
-function loadComments() {
+function randomColor() {
+    const colors = ["#2e7d32","#388e3c","#43a047","#66bb6a","#81c784","#4caf50","#1b5e20"];
+    return colors[Math.floor(Math.random()*colors.length)];
+}
+
+function randomDate(start, end){
+    const d = new Date(start.getTime() + Math.random()*(end.getTime()-start.getTime()));
+    return d.toLocaleDateString();
+}
+
+// LOAD COMMENTS
+const commentList = document.getElementById("commentList");
+
+function loadComments(){
     let comments = JSON.parse(localStorage.getItem("siteComments"));
-    if (!comments) {
+    if(!comments){
         comments = defaultComments;
         localStorage.setItem("siteComments", JSON.stringify(comments));
     }
 
     commentList.innerHTML = "";
-    comments.forEach(c => {
+
+    comments.forEach((c,index)=>{
         const div = document.createElement("div");
         div.className = "comment";
         div.innerHTML = `
-            <div class="avatar">${initial(c.name)}</div>
+            <div class="avatar" style="background:${randomColor()}">${initial(c.name)}</div>
             <div class="comment-content">
-                <strong>${c.name}</strong>
+                <strong>${c.name}</strong> <span style="color:#999;font-size:0.85em;">(${c.date})</span>
                 <p>${c.message}</p>
+                <div style="margin-left: 50px;" id="replies-${index}"></div>
             </div>
         `;
         commentList.appendChild(div);
+
+        const repliesDiv = document.getElementById(`replies-${index}`);
+        if(c.replies && c.replies.length > 0){
+            c.replies.forEach(r=>{
+                const rdiv = document.createElement("div");
+                rdiv.style.display = "flex";
+                rdiv.style.gap = "10px";
+                rdiv.style.marginTop = "8px";
+                rdiv.innerHTML = `
+                    <div class="avatar" style="background:${randomColor()};width:32px;height:32px;font-size:0.9em">${initial(r.name)}</div>
+                    <div style="flex:1;">
+                        <strong>${r.name}</strong> <span style="color:#999;font-size:0.75em">(${r.date})</span>
+                        <p style="margin:2px 0;">${r.message}</p>
+                    </div>
+                `;
+                repliesDiv.appendChild(rdiv);
+            });
+        }
     });
 }
 
-function addComment() {
+// ADD NEW COMMENT
+function addComment(){
     const name = document.getElementById("name").value.trim();
     const message = document.getElementById("message").value.trim();
-
-    if (!name || !message) {
+    if(!name || !message){
         alert("Please enter both name and comment.");
         return;
     }
-
-    let comments = JSON.parse(localStorage.getItem("siteComments")) || [];
-    comments.push({ name, message });
+    const comments = JSON.parse(localStorage.getItem("siteComments")) || [];
+    comments.push({name,message,date:randomDate(new Date(2024,0,1), new Date()), replies:[]});
     localStorage.setItem("siteComments", JSON.stringify(comments));
-
-    document.getElementById("name").value = "";
-    document.getElementById("message").value = "";
-
+    document.getElementById("name").value="";
+    document.getElementById("message").value="";
     loadComments();
 }
 
 loadComments();
 </script>
+
+
 
 </body>
 </html>
